@@ -1,8 +1,14 @@
-﻿import React from "react";
+﻿import React, { useContext } from "react";
 import { useParams, Link } from "react-router-dom";
+import { CarroContext } from "../contexts/CarroContext";
 
-export default function Detalhes({ carros }) {
+export default function Detalhes() {
   const { id } = useParams();
+  
+  /* Puxando a lista de carros do Contexto */
+  const { carros } = useContext(CarroContext);
+
+  /* Encontrando o carro específico pelo ID */
   const carro = carros.find((c) => c.id === parseInt(id));
 
   if (!carro) {
@@ -10,9 +16,7 @@ export default function Detalhes({ carros }) {
       <div className="container">
         <h2>Carro não encontrado</h2>
         <Link to="/">
-          <button style={{ backgroundColor: "#007bff" }}>
-            Voltar
-          </button>
+          <button className="detalhes">Voltar</button>
         </Link>
       </div>
     );
@@ -25,13 +29,13 @@ export default function Detalhes({ carros }) {
       <img
         src={carro.foto}
         alt={carro.modelo}
-        style={{ width: "100%", maxHeight: "300px", objectFit: "cover" }}
+        style={{ width: "100%", maxHeight: "400px", objectFit: "cover", borderRadius: "8px", marginBottom: "20px" }}
       />
 
       <p><strong>Marca:</strong> {carro.marca}</p>
       <p><strong>Modelo:</strong> {carro.modelo}</p>
       <p><strong>Ano:</strong> {carro.ano}</p>
-      <p><strong>Preço:</strong> R$ {carro.preco}</p>
+      <p><strong>Preço:</strong> {carro.preco}</p>
       <p><strong>Câmbio:</strong> {carro.cambio}</p>
       <p><strong>Combustível:</strong> {carro.combustivel}</p>
       <p><strong>Quilometragem:</strong> {carro.km} km</p>
@@ -40,8 +44,8 @@ export default function Detalhes({ carros }) {
       <p><strong>Descrição:</strong> {carro.descricao}</p>
 
       <Link to="/">
-        <button style={{ backgroundColor: "#007bff" }}>
-          Voltar
+        <button className="detalhes" style={{ marginTop: "20px" }}>
+          Voltar para o Estoque
         </button>
       </Link>
     </div>

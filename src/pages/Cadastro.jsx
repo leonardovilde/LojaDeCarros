@@ -1,75 +1,34 @@
-﻿import React from "react";
+﻿import React, { useContext } from "react"; // 1. Adicionado o useContext
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useNavigate } from "react-router-dom"; // Opcional: para voltar para a home após cadastrar
+import { CarroContext } from "../contexts/CarroContext"; // 2. Importar o contexto
 
 const schema = yup.object().shape({
-  marca: yup
-    .string()
-    .required("A marca é obrigatória"),
-
-  modelo: yup
-    .string()
-    .required("O modelo é obrigatório"),
-
-  ano: yup
-    .number()
-    .typeError("O ano deve ser um número")
-    .required("O ano é obrigatório")
-    .min(1900, "Ano inválido")
-    .max(new Date().getFullYear(), "Ano inválido"),
-
-  preco: yup
-    .number()
-    .typeError("Preço deve ser um número")
-    .required("O preço é obrigatório")
-    .positive("O preço deve ser positivo"),
-
-  km: yup
-    .number()
-    .typeError("KM deve ser um número")
-    .required("Quilometragem obrigatória")
-    .min(0, "KM não pode ser negativo"),
-
-  cor: yup
-    .string()
-    .required("A cor é obrigatória"),
-
-  cambio: yup
-    .string()
-    .required("Selecione o câmbio"),
-
-  combustivel: yup
-    .string()
-    .required("Selecione o combustível"),
-
-  portas: yup
-    .number()
-    .typeError("Número de portas inválido")
-    .required("Informe o número de portas")
-    .min(2, "Mínimo 2 portas")
-    .max(6, "Máximo 6 portas"),
-
-  descricao: yup
-    .string()
-    .required("A descrição é obrigatória")
-    .min(10, "Descrição muito curta"),
-
-  foto: yup
-    .string()
-    .required("Imagem obrigatória")
-    .test(
+  marca: yup.string().required("A marca é obrigatória"),
+  modelo: yup.string().required("O modelo é obrigatório"),
+  ano: yup.number().typeError("O ano deve ser um número").required("O ano é obrigatório").min(1900, "Ano inválido").max(new Date().getFullYear(), "Ano inválido"),
+  preco: yup.number().typeError("Preço deve ser um número").required("O preço é obrigatório").positive("O preço deve ser positivo"),
+  km: yup.number().typeError("KM deve ser um número").required("Quilometragem obrigatória").min(0, "KM não pode ser negativo"),
+  cor: yup.string().required("A cor é obrigatória"),
+  cambio: yup.string().required("Selecione o câmbio"),
+  combustivel: yup.string().required("Selecione o combustível"),
+  portas: yup.number().typeError("Número de portas inválido").required("Informe o número de portas").min(2, "Mínimo 2 portas").max(6, "Máximo 6 portas"),
+  descricao: yup.string().required("A descrição é obrigatória").min(10, "Descrição muito curta"),
+  foto: yup.string().required("Imagem obrigatória").test(
       "is-valid-image",
       "Digite uma URL válida ou imagem Base64 válida",
-      (value) =>
-        value &&
-        (value.startsWith("http://") ||
-          value.startsWith("https://") ||
-          value.startsWith("data:image/"))
+      (value) => value && (value.startsWith("http://") || value.startsWith("https://") || value.startsWith("data:image/"))
     )
 });
 
-export default function Cadastro({ adicionarCarro }) {
+// 3. Removemos o { adicionarCarro } dos parênteses da função
+export default function Cadastro() {
+  // 4. Pegamos a função direto do Contexto
+  const { adicionarCarro } = useContext(CarroContext);
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -87,6 +46,7 @@ export default function Cadastro({ adicionarCarro }) {
 
     alert("Carro cadastrado com sucesso!");
     reset();
+    navigate("/"); // 5. Isso faz o app voltar para a lista de carros automaticamente
   };
 
   return (
@@ -94,7 +54,6 @@ export default function Cadastro({ adicionarCarro }) {
       <h2>Cadastro de Carro</h2>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-
         <label>Marca</label>
         <input {...register("marca")} />
         <p style={{ color: "red" }}>{errors.marca?.message}</p>
@@ -149,8 +108,10 @@ export default function Cadastro({ adicionarCarro }) {
         <input {...register("foto")} />
         <p style={{ color: "red" }}>{errors.foto?.message}</p>
 
-        <br /><br />
-        <button type="submit">Cadastrar</button>
+        <br />
+        <button type="submit" className="detalhes" style={{ width: "100%" }}>
+          Cadastrar Carro
+        </button>
       </form>
     </div>
   );
