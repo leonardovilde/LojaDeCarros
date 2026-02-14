@@ -1,9 +1,9 @@
-﻿import React, { useContext } from "react"; // 1. Adicionado o useContext
+﻿import React, { useContext } from "react"; 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useNavigate } from "react-router-dom"; // Opcional: para voltar para a home após cadastrar
-import { CarroContext } from "../contexts/CarroContext"; // 2. Importar o contexto
+import { useNavigate } from "react-router-dom";  
+import { CarroContext } from "../contexts/CarroContext"; 
 
 const schema = yup.object().shape({
   marca: yup.string().required("A marca é obrigatória"),
@@ -23,9 +23,9 @@ const schema = yup.object().shape({
     )
 });
 
-// 3. Removemos o { adicionarCarro } dos parênteses da função
+
 export default function Cadastro() {
-  // 4. Pegamos a função direto do Contexto
+  
   const { adicionarCarro } = useContext(CarroContext);
   const navigate = useNavigate();
 
@@ -46,7 +46,7 @@ export default function Cadastro() {
 
     alert("Carro cadastrado com sucesso!");
     reset();
-    navigate("/"); // 5. Isso faz o app voltar para a lista de carros automaticamente
+    navigate("/"); 
   };
 
   return (

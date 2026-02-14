@@ -5,10 +5,10 @@ import { CarroContext } from "../contexts/CarroContext";
 export default function Detalhes() {
   const { id } = useParams();
   
-  /* Puxando a lista de carros do Contexto */
+  
   const { carros } = useContext(CarroContext);
 
-  /* Encontrando o carro específico pelo ID */
+  
   const carro = carros.find((c) => c.id === parseInt(id));
 
   if (!carro) {
